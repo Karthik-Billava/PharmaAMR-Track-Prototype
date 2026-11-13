@@ -1,0 +1,29 @@
+{% extends "base.html" %}{% block title %}Dashboard · PharmaAMR-Track{% endblock %}
+{% block content %}
+<div class="pagehead"><div><div class="eyebrow">{% if user.role == 'admin' %}NETWORK OVERVIEW{% else %}PHARMACY OVERVIEW{% endif %}</div><h1>Surveillance dashboard</h1><p class="muted">{% if user.role == 'admin' %}Aggregated view across participating demo pharmacies.{% else %}Your pharmacy's records only.{% endif %}</p></div><a class="primary buttonlink" href="/visits/new">＋ New record</a></div>
+<div class="notice"><b>Demo environment:</b> the numbers below are fictional seed data or records entered during testing. Do not enter real patient-identifiable information.</div>
+<div class="stats">
+<div class="stat"><span>Total visit records</span><b>{{ total_visits }}</b></div>
+<div class="stat"><span>Antibiotic records dispensed</span><b>{{ antibiotic_tx }}</b></div>
+<div class="stat"><span>Visits reporting no prescription</span><b>{{ no_rx }}</b></div>
+{% if user.role == 'admin' %}<div class="stat"><span>Participating pharmacies</span><b>{{ pharmacies }}</b></div>{% endif %}
+</div>
+<div class="two-col">
+<section class="panel"><div class="sectionhead"><h2>AWaRe distribution</h2><span class="muted tiny">Dispensing records</span></div>
+{% set total = aware.values()|sum %}
+{% for group in ['Access','Watch','Reserve','Unclassified'] %}
+{% set val = aware.get(group, 0) %}
+<div class="barrow"><div><span>{{ group }}</span><b>{{ val }}</b></div><div class="track"><i class="bar {{ group|lower }}" style="width:{{ (val / total * 100) if total else 0 }}%"></i></div></div>
+{% endfor %}
+{% if not total %}<p class="muted">No records yet. Add the first pharmacy record.</p>{% endif %}
+<p class="tiny muted">AWaRe category is a medicine classification, not a judgement that an individual prescription is appropriate or inappropriate.</p>
+</section>
+<section class="panel"><div class="sectionhead"><h2>Most recorded antibiotics</h2></div>
+{% for name,count in top %}<div class="toprow"><span>{{ name }}</span><b>{{ count }}</b></div>{% else %}<p class="muted">No antibiotic records yet.</p>{% endfor %}
+</section></div>
+<section class="panel"><div class="sectionhead"><h2>Recent records</h2><a href="/export.csv">Download CSV ↓</a></div>
+{% if recent %}<div class="tablewrap"><table><thead><tr><th>Visit ID</th><th>Age group</th><th>Prescription</th><th>Outcome</th><th>Date</th><th></th></tr></thead><tbody>
+{% for v in recent %}<tr><td>{{ v.visit_code }}</td><td>{{ v.age_group }}</td><td>{{ v.prescription_presented }}</td><td>{{ v.dispensing_outcome }}</td><td>{{ v.created_at.strftime('%d %b %Y') }}</td><td><a href="/visits/{{ v.id }}">View</a></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<p class="muted">No visits have been recorded.</p>{% endif %}
+</section>
+{% endblock %}

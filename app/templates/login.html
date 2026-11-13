@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Sign in · PharmaAMR-Track{% endblock %}
+{% block content %}
+<div class="login-wrap"><section class="panel login">
+<div class="eyebrow">MULTI-PHARMACY SURVEILLANCE</div><h1>Welcome back</h1><p class="muted">Sign in to record antibiotic-use information or review aggregated surveillance data.</p>
+{% if error %}<div class="alert danger">{{ error }}</div>{% endif %}
+<form method="post" action="/login">
+<label>Username<input name="username" autocomplete="username" required></label>
+<label>Password<input type="password" name="password" autocomplete="current-password" required></label>
+<button class="primary full">Sign in</button>
+</form>
+<div class="demo"><b>Demo accounts</b><br>Administrator: <code>admin</code> / <code>Admin@12345</code><br>Pharmacy: <code>pharmacy1</code> / <code>Pharmacy@123</code></div>
+</section></div>
+{% endblock %}

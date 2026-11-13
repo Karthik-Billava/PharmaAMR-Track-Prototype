@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block title %}AI alerts · PharmaAMR-Track{% endblock %}
+{% block content %}
+<div class="pagehead"><div><div class="eyebrow">AI-ASSISTED SURVEILLANCE</div><h1>Pattern review & data quality</h1><p class="muted">Transparent demo rules; alerts require human review.</p></div></div>
+<div class="notice"><b>Interpretation:</b> an increase in dispensing is a signal to investigate data and context. It does not establish infection, antimicrobial resistance, inappropriate prescribing or an outbreak.</div>
+<div class="stats"><div class="stat"><span>Last 7 days</span><b>{{ recent_count }}</b></div><div class="stat"><span>Previous 7 days</span><b>{{ prior_count }}</b></div><div class="stat"><span>Records checked</span><b>{{ total }}</b></div><div class="stat"><span>Potentially incomplete records</span><b>{{ missing }}</b></div></div>
+<section class="panel"><h2>System observations</h2>{% for flag in flags %}<div class="alert info">● {{ flag }}</div>{% endfor %}</section>
+<section class="panel"><h2>Data completeness checks</h2><ul><li>Symptoms not recorded</li><li>Prescription status marked unknown</li><li>AWaRe category unclassified</li></ul><p class="muted tiny">This prototype uses a simple rule-based comparison, not a trained machine-learning model. It needs adequate data volume and validation before operational use.</p></section>
+{% endblock %}

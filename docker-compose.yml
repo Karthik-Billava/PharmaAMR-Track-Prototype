@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pharmaamr
+      POSTGRES_USER: pharmaamr
+      POSTGRES_PASSWORD: change-this-password
+    volumes:
+      - pharmaamr_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pharmaamr -d pharmaamr"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  web:
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+psycopg://pharmaamr:change-this-password@db:5432/pharmaamr
+      SECRET_KEY: replace-this-with-a-long-random-secret
+      SEED_DEMO: "true"
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  pharmaamr_pgdata:

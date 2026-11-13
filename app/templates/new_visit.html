@@ -1,0 +1,48 @@
+{% extends "base.html" %}{% block title %}New record · PharmaAMR-Track{% endblock %}
+{% block content %}
+<div class="pagehead"><div><div class="eyebrow">PHARMACY DATA ENTRY</div><h1>New patient interaction</h1><p class="muted">Use a pseudonymous token. Do not enter names, phone numbers or exact home addresses.</p></div></div>
+{% if error %}<div class="alert danger">{{ error }}</div>{% endif %}
+<form method="post" action="/visits/new" class="formstack">
+<section class="panel"><h2>1. Patient profile</h2><div class="formgrid">
+<label>Age group *<select name="age_group" required><option>18–24</option><option>25–44</option><option>45–59</option><option>60+</option><option>Under 5</option><option>5–17</option><option>Unknown</option></select></label>
+<label>Sex (optional)<select name="sex"><option>Not stated</option><option>Female</option><option>Male</option><option>Other</option><option>Prefer not to say</option></select></label>
+<label>Locality / area code (optional)<input name="locality" maxlength="100" placeholder="e.g. area or PIN prefix"></label>
+</div><p class="tiny muted">A random patient token is generated automatically. Repeat-visit linking is not enabled in this demo.</p></section>
+<section class="panel"><h2>2. Visit information</h2><div class="formgrid">
+<label>Reason for visit<select name="reason_for_visit"><option>New symptoms</option><option>Existing prescription</option><option>Refill</option><option>Follow-up</option><option>Other</option></select></label>
+<label>Symptom duration<select name="symptom_duration"><option>Less than 1 day</option><option>1–3 days</option><option>4–7 days</option><option>More than 7 days</option><option>Unknown</option></select></label>
+<label>Doctor consulted for this illness?<select name="doctor_consulted"><option>Unknown</option><option>Yes</option><option>No</option></select></label>
+<label>Diagnostic test performed?<select name="test_performed"><option>Unknown</option><option>Yes</option><option>No</option></select></label>
+<label>Test type (if known)<input name="test_type" placeholder="e.g. culture, rapid test"></label>
+</div><label>Symptoms reported <textarea name="symptoms" rows="3" placeholder="Select or type reported symptoms (e.g. fever, cough, sore throat)"></textarea></label></section>
+<section class="panel"><h2>3. Prescription information</h2><div class="formgrid">
+<label>Prescription presented?<select name="prescription_presented"><option>Unknown</option><option>Yes</option><option>No</option></select></label>
+<label>Prescriber type<select name="prescriber_type"><option>Unknown</option><option>Registered medical practitioner</option><option>Hospital</option><option>Other</option></select></label>
+<label>Who suggested the antibiotic?<select name="request_source"><option>Unknown</option><option>Doctor</option><option>Patient</option><option>Relative / caregiver</option><option>Pharmacist</option><option>Previous prescription</option><option>Other</option></select></label>
+<label>Reason for request<select name="reason_for_request"><option>Unknown</option><option>New illness</option><option>Recurring symptoms</option><option>Previous treatment</option><option>Refill</option><option>Preventive use</option><option>Other</option></select></label>
+</div></section>
+<section class="panel"><h2>4. Antibiotic requested / dispensed</h2><p class="muted tiny">Enter one antibiotic per record. Create separate visit records for additional antibiotics in this MVP.</p>
+<div class="formgrid">
+<label>Generic name *<input name="generic_name" required placeholder="e.g. amoxicillin"></label>
+<label>Brand name (optional)<input name="brand_name" placeholder="Brand, if known"></label>
+<label>Strength<input name="strength" placeholder="e.g. 500 mg"></label>
+<label>Dosage form<select name="dosage_form"><option>Tablet</option><option>Capsule</option><option>Oral suspension</option><option>Injection</option><option>Topical</option><option>Other</option></select></label>
+<label>Route<select name="route"><option>Oral</option><option>IV</option><option>IM</option><option>Topical</option><option>Other</option></select></label>
+<label>Quantity dispensed<input name="quantity_dispensed" placeholder="e.g. 10 tablets"></label>
+<label>Prescribed duration (days)<input type="number" name="prescribed_duration_days" min="1" max="365" placeholder="If documented"></label>
+<label>AWaRe category<select name="aware_category"><option>Unclassified</option><option>Access</option><option>Watch</option><option>Reserve</option></select></label>
+<label>ATC code (optional)<input name="atc_code" placeholder="If known"></label>
+</div>
+<div class="checkgrid"><label class="check"><input type="checkbox" name="requested" value="yes" checked> Antibiotic was requested</label><label class="check"><input type="checkbox" name="dispensed" value="yes" checked> Antibiotic was dispensed</label></div>
+</section>
+<section class="panel"><h2>5. Previous antibiotic history</h2><div class="formgrid">
+<label>Antibiotic use in last 90 days?<select name="previous_antibiotic_90d"><option>Unknown</option><option>Yes</option><option>No</option></select></label>
+<label>Previous course completed?<select name="previous_course_completed"><option>Unknown</option><option>Yes</option><option>No</option><option>Partially</option><option>Not applicable</option></select></label>
+</div></section>
+<section class="panel"><h2>6. Dispensing and referral outcome</h2><div class="formgrid">
+<label>Outcome<select name="dispensing_outcome"><option>Dispensed</option><option>Partially dispensed</option><option>Not dispensed</option><option>Referred without dispensing</option></select></label>
+<label>Referred to doctor / hospital?<select name="referral"><option>No</option><option>Doctor</option><option>Hospital</option></select></label>
+</div><label class="check"><input type="checkbox" name="counselling" value="yes"> Patient counselling provided</label></section>
+<div class="formactions"><a class="secondary buttonlink" href="/dashboard">Cancel</a><button class="primary" type="submit">Save record securely</button></div>
+</form>
+{% endblock %}
